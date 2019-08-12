@@ -2,7 +2,7 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <div style="border: solid 1px black; display: inline-block">
-    <svg width="800px" height="640px" id="magic" />
+    <svg width="800px" height="640px" ref="navigator" />
     </div>
   </div>
 </template>
@@ -21,8 +21,31 @@ export default {
     navigator: new Navigator(7, 7)
   }),
   mounted() {
-    const magic = document.getElementById("magic");
-    this.navigator.drawRooms(magic);
+    const navEl = this.$refs.navigator;
+    this.navigator.drawRooms(navEl);
+
+    window.addEventListener("keypress", (function(e) {
+      let keyDispatch = {
+        n: function() {
+          this.navigator.goDirection(navEl, 0, -1);
+        },
+        w: function() {
+          this.navigator.goDirection(navEl, -1, 0);
+        },
+        s: function() {
+          this.navigator.goDirection(navEl, 0, 1);
+        },
+        e: function() {
+          this.navigator.goDirection(navEl, 1, 0);
+        },
+      };
+      console.log(this.navigator);
+      if (!this.navigator.isMoving()) {
+        if (keyDispatch.hasOwnProperty(e.key)) {
+          keyDispatch[e.key].bind(this)();
+        }
+      }
+    }).bind(this));
   },
 }
 </script>
