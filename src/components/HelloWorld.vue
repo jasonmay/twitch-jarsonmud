@@ -9,7 +9,6 @@
 
 <script>
 /* eslint-disable */
-import {TimelineMax} from 'gsap'
 import Navigator from './interface.js';
 
 export default {

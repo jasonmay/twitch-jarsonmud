@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import {TimelineMax} from 'gsap';
+import {TweenMax} from 'gsap';
 
 const P_WIDTH = 100;
 const P_HEIGHT = 40;
@@ -18,10 +18,6 @@ class Navigator {
 
         this.cx = START_CELL_X;
         this.cy = START_CELL_Y;
-
-        this._moving = false;
-
-        this.timeline = new TimelineMax();
     }
 
     _leftSide(x, y) {
@@ -89,7 +85,7 @@ class Navigator {
     }
 
     isMoving() {
-        return this._moving;
+        return false;
     }
 
     selectRoom(x, y) {
@@ -97,23 +93,28 @@ class Navigator {
     }
 
     goDirection(svg, x, y) {
-        const vbw = this._viewBoxWidth(this.cx + x, this.cy + y);
-        const vbh = this._viewBoxHeight(this.cx + x, this.cy + y);
-        const vbx = this._viewBoxLeft(this.cx + x, this.cy + y);
-        const vby = this._viewBoxTop(this.cx + x, this.cy + y);
+        let nx = this.cx + x;
+        let ny = this.cy + y;
+
+        if (nx < 0) nx = 0;
+        if (ny < 0) ny = 0;
+        if (nx >= this.px) nx = this.px - 1;
+        if (ny >= this.py) ny = this.py - 1;
+
+        const vbw = this._viewBoxWidth(nx, ny);
+        const vbh = this._viewBoxHeight(nx, ny);
+        const vbx = this._viewBoxLeft(nx, ny);
+        const vby = this._viewBoxTop(nx, ny);
 
         const viewBox = [vbx, vby, vbw, vbh].join(" ");
 
-        this._moving = true;
-        console.log("before");
-        this.timeline.to(
+        TweenMax.to(
             svg, 0.3, {attr: { viewBox: viewBox }}
         ).eventCallback(
             "onComplete", (() => { this._moving = false; }).bind(this)
         );
-        console.log("after");
-        this.cx += x;
-        this.cy += y;
+        this.cx = nx;
+        this.cy = ny;
     }
 }
 
