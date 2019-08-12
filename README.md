@@ -1,4 +1,4 @@
-# testing-3d
+# JarsonMUD Editor
 
 ## Project setup
 ```
