@@ -317,12 +317,274 @@ Now let's imagine if we allowed any quest writer to just write python and inject
 
 How do we solve that? By **abstracting all dangerous operations with our own AST**. The reason this is even a potential solution is that Python can compile a Python AST down into a [code object](https://docs.python.org/3/c-api/code.html), which (I think) has just as much performance overhead as a .pyc file, which is what any .py script compiles down to when run from the shell.
 
-Accessing arbitrary variables and functions? Terrible idea. 
+Accessing arbitrary variables and functions via user input? Terrible idea. I am proposing a few abstractions that might involve some minor overhead on the designer's point of view to make it efficient, but allowing making new node types and functions should simplify that.
 
-Here is a proposed example (obviously likely to change).
+Here is a (very rough) proposed example:
 
 ```
 [
-    "TODO"
+    {
+        "node": "Assign",
+        "variable": "loc_id"
+        "expression": {
+            "node": "PlayerProperty",
+            "key": "location",
+        }
+    },
+    {
+        "node": "Assign",
+        "variable": "loc"
+        "expression": {
+            "node": "Entity",
+            "key": {
+                "node": "Variable",
+                "var_name": "loc_id"
+            }
+        }
+    },
+    {
+        "node": "Assign",
+        "variable": "directions"
+        "expression": {
+            "node": "List",
+            "elements": [
+                {
+                    "node": "StringLiteral",
+                    "literal_value": "north"
+                },
+                {
+                    "node": "StringLiteral",
+                    "literal_value": "south"
+                },
+                {
+                    "node": "StringLiteral",
+                    "literal_value": "east"
+                },
+                {
+                    "node": "StringLiteral",
+                    "literal_value": "west"
+                },
+                {
+                    "node": "StringLiteral",
+                    "literal_value": "up"
+                },
+                {
+                    "node": "StringLiteral",
+                    "literal_value": "down"
+                }
+            ]
+        }
+    },
+    {
+        "node": "SendToPlayer",
+        "expression": {
+            "node": "EntityProperty",
+            "entity": {
+                "node": "Variable",
+                "var_name": "loc"
+            },
+            "property": {
+                "node": "StringLiteral",
+                "literal_value": "title"
+            }
+        }
+    },
+    {
+        "node": "SendToPlayer",
+        "expression": {
+            "node": "EntityProperty",
+            "entity": {
+                "node": "Variable",
+                "var_name": "loc"
+            },
+            "property": {
+                "node": "StringLiteral",
+                "literal_value": "title"
+            }
+        }
+    },
+    {
+        "node": "SendToPlayer",
+        "expression": {
+            "node": "EntityProperty",
+            "entity": {
+                "node": "Variable",
+                "var_name": "loc"
+            },
+            "property": {
+                "node": "StringLiteral",
+                "literal_value": "description"
+            }
+        }
+    },
+    {
+        "node": "SendToPlayer",
+        "expression": {
+            "node": "EntityProperty",
+            "entity": {
+                "node": "Variable",
+                "var_name": "loc"
+            },
+            "property": {
+                "node": "StringLiteral",
+                "literal_value": "description"
+            }
+        }
+    },
+    {
+        "node": "Loop",
+        "iter_var_name": "mob",
+        "list_expression": {
+            "node": "Entities",
+            "filter": {
+                "node": "Compare",
+                "operator": "EntityType",
+                "left": {
+                    "node": "Variable",
+                    "var_name": "mob"
+                },
+                "right": {
+                    "node": "StringLiteral",
+                    "literal_value": "Mobile"
+                }
+            }
+        },
+        "body": [
+            {
+                "node": "SendToPlayer",
+                "expression": {
+                    "node": "EntityProperty",
+                    "entity": {
+                        "node" "Variable",
+                        "var_name": "mob"
+                    }
+                    "key": {
+                        "node": "Variable",
+                        "var_name": "standing_description"
+                    }
+                }
+            },
+        ]
+    },
+    {
+        "node": "Loop",
+        "iter_var_name": "obj",
+        "list_expression": {
+            "node": "Entities",
+            "filter": {
+                "node": "Compare",
+                "operator": "EntityType",
+                "left": {
+                    "node": "Variable",
+                    "var_name": "obj"
+                },
+                "right": {
+                    "node": "StringLiteral",
+                    "literal_value": "Object"
+                }
+            }
+        },
+        "body": [
+            {
+                "node": "SendToPlayer",
+                "expression": {
+                    "node": "EntityProperty",
+                    "entity": {
+                        "node" "Variable",
+                        "var_name": "obj"
+                    }
+                    "key": {
+                        "node": "Variable",
+                        "var_name": "description"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "node": "Loop",
+        "iter_var_name": "direction",
+        "list_expression": {
+            "node": "Variable",
+            "var_name": "directions"
+        },
+        "body": [
+            {
+                "node": "If",
+                "condition": {
+                    "node": "Compare",
+                    "operator": "In",
+                    "iter_expression": {
+                        "node": "Variable",
+                        "var_name": "direction"
+                    },
+                    "collection_expression": {
+                        "node": "EntityProperty",
+                        "entity": {
+                            "node": "Variable",
+                            "var_name": "loc"
+                        },
+                        "property": {
+                            "node": "Variable",
+                            "var_name": "exits"
+                        }
+                    },
+                },
+                "if_body": {
+                    "node": "SendToPlayer",
+                    "expression": {
+                        "node": "StringConcat",
+                        "strings": [
+                            {
+                                "node": "Variable",
+                                "var_name": "direction"
+                            },
+                            {
+                                "node": "StringLiteral",
+                                "literal_value": ": "
+                            },
+                            {
+                                # TODO: need to wrap this in locations[...]
+                                # (because i'ts locations[loc.exits[direction]].title)
+                                "node": "Subscript",
+                                "base": {
+                                    "node": "EntityProperty",
+                                    "entity": {
+                                        "node": "Variable",
+                                        "var_name": "loc",
+                                    },
+                                    "property": {
+                                        "node": "StringLiteral",
+                                        "literal_value": "exits",
+                                    },
+                                },
+                                "index": {
+                                }
+                        ]
+                    }
+                },
+                "else_body": {
+                    # no else needed
+                },
+            {
+                "node": "SendToPlayer",
+                "expression": {
+                    "node": "EntityProperty",
+                    "entity": {
+                        "node" "Variable",
+                        "var_name": "obj"
+                    }
+                    "key": {
+                        "node": "Variable",
+                        "var_name": "description"
+                    }
+                }
+            }
+        ]
+    }
 ]
 ```
+
+#### Why not just make a language? Wouldn't that be much less effort to write?
+
+You know what, you're right. That would be less effort to write than a gigantic JSON structure every time we want to write custom logic. If we don't decouple it with an abstracted AST, the language could also be a security nightmare. Anybody can write their own grammar that builds an AST. The extra benefit of having an AST to work with directly is building the AST with concepts other than languages or grammars. Perhaps logic you can change with a website and validate. Or a fluid tree building flow from a native mobile app.
