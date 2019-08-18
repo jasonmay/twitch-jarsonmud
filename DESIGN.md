@@ -544,21 +544,31 @@ Here is a (very rough) proposed example:
                                 "literal_value": ": "
                             },
                             {
-                                # TODO: need to wrap this in locations[...]
-                                # (because i'ts locations[loc.exits[direction]].title)
-                                "node": "Subscript",
-                                "base": {
-                                    "node": "EntityProperty",
-                                    "entity": {
-                                        "node": "Variable",
-                                        "var_name": "loc",
-                                    },
-                                    "property": {
-                                        "node": "StringLiteral",
-                                        "literal_value": "exits",
-                                    },
-                                },
-                                "index": {
+                                "node": "EntityProperty",
+                                "entity": {
+                                    "node": "Entity",
+                                    "key": {
+                                        "node": "Subscript",
+                                        "base": {
+                                            "node": "EntityProperty",
+                                            "entity": {
+                                                "node": "Variable",
+                                                "var_name": "loc",
+                                            },
+                                            "property": {
+                                                "node": "StringLiteral",
+                                                "literal_value": "exits",
+                                            },
+                                        },
+                                        "index": {
+                                            "node": "StringLiteral",
+                                            "literal_value": "direction",
+                                        }
+                                    }
+                                }
+                                "property": {
+                                    "node": "StringLiteral",
+                                    "literal_value": "title"
                                 }
                         ]
                     }
@@ -584,6 +594,8 @@ Here is a (very rough) proposed example:
     }
 ]
 ```
+
+Notice that there is no concept of using existing variable names. Any new variables are ones I create within the scope of the AST. This prevents remote execution. Entities are called using abstract nodes, like "Entity" and "EntityProperty" instead of actual variable names and having the ability to call dangerous functions on them.
 
 #### Why not just make a language? Wouldn't that be much less effort to write?
 
