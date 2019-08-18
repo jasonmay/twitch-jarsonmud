@@ -323,275 +323,261 @@ Here is a (very rough) proposed example:
 
 ```json
 [
-    {
-        "node": "Assign",
-        "variable": "loc_id"
-        "expression": {
-            "node": "PlayerProperty",
-            "key": "location",
-        }
-    },
-    {
-        "node": "Assign",
-        "variable": "loc"
-        "expression": {
-            "node": "Entity",
-            "key": {
-                "node": "Variable",
-                "var_name": "loc_id"
-            }
-        }
-    },
-    {
-        "node": "Assign",
-        "variable": "directions"
-        "expression": {
-            "node": "List",
-            "elements": [
-                {
-                    "node": "StringLiteral",
-                    "literal_value": "north"
-                },
-                {
-                    "node": "StringLiteral",
-                    "literal_value": "south"
-                },
-                {
-                    "node": "StringLiteral",
-                    "literal_value": "east"
-                },
-                {
-                    "node": "StringLiteral",
-                    "literal_value": "west"
-                },
-                {
-                    "node": "StringLiteral",
-                    "literal_value": "up"
-                },
-                {
-                    "node": "StringLiteral",
-                    "literal_value": "down"
-                }
-            ]
-        }
-    },
-    {
-        "node": "SendToPlayer",
-        "expression": {
-            "node": "EntityProperty",
-            "entity": {
-                "node": "Variable",
-                "var_name": "loc"
-            },
-            "property": {
-                "node": "StringLiteral",
-                "literal_value": "title"
-            }
-        }
-    },
-    {
-        "node": "SendToPlayer",
-        "expression": {
-            "node": "EntityProperty",
-            "entity": {
-                "node": "Variable",
-                "var_name": "loc"
-            },
-            "property": {
-                "node": "StringLiteral",
-                "literal_value": "title"
-            }
-        }
-    },
-    {
-        "node": "SendToPlayer",
-        "expression": {
-            "node": "EntityProperty",
-            "entity": {
-                "node": "Variable",
-                "var_name": "loc"
-            },
-            "property": {
-                "node": "StringLiteral",
-                "literal_value": "description"
-            }
-        }
-    },
-    {
-        "node": "SendToPlayer",
-        "expression": {
-            "node": "EntityProperty",
-            "entity": {
-                "node": "Variable",
-                "var_name": "loc"
-            },
-            "property": {
-                "node": "StringLiteral",
-                "literal_value": "description"
-            }
-        }
-    },
-    {
-        "node": "Loop",
-        "iter_var_name": "mob",
-        "list_expression": {
-            "node": "Entities",
-            "filter": {
-                "node": "Compare",
-                "operator": "EntityType",
-                "left": {
-                    "node": "Variable",
-                    "var_name": "mob"
-                },
-                "right": {
-                    "node": "StringLiteral",
-                    "literal_value": "Mobile"
-                }
-            }
-        },
-        "body": [
-            {
-                "node": "SendToPlayer",
-                "expression": {
-                    "node": "EntityProperty",
-                    "entity": {
-                        "node" "Variable",
-                        "var_name": "mob"
-                    }
-                    "key": {
-                        "node": "Variable",
-                        "var_name": "standing_description"
-                    }
-                }
-            },
-        ]
-    },
-    {
-        "node": "Loop",
-        "iter_var_name": "obj",
-        "list_expression": {
-            "node": "Entities",
-            "filter": {
-                "node": "Compare",
-                "operator": "EntityType",
-                "left": {
-                    "node": "Variable",
-                    "var_name": "obj"
-                },
-                "right": {
-                    "node": "StringLiteral",
-                    "literal_value": "Object"
-                }
-            }
-        },
-        "body": [
-            {
-                "node": "SendToPlayer",
-                "expression": {
-                    "node": "EntityProperty",
-                    "entity": {
-                        "node" "Variable",
-                        "var_name": "obj"
-                    }
-                    "key": {
-                        "node": "Variable",
-                        "var_name": "description"
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "node": "Loop",
-        "iter_var_name": "direction",
-        "list_expression": {
-            "node": "Variable",
-            "var_name": "directions"
-        },
-        "body": [
-            {
-                "node": "If",
-                "condition": {
-                    "node": "Compare",
-                    "operator": "In",
-                    "iter_expression": {
-                        "node": "Variable",
-                        "var_name": "direction"
-                    },
-                    "collection_expression": {
-                        "node": "EntityProperty",
-                        "entity": {
-                            "node": "Variable",
-                            "var_name": "loc"
-                        },
-                        "property": {
-                            "node": "Variable",
-                            "var_name": "exits"
-                        }
-                    },
-                },
-                "if_body": {
-                    "node": "SendToPlayer",
-                    "expression": {
-                        "node": "StringConcat",
-                        "strings": [
-                            {
-                                "node": "Variable",
-                                "var_name": "direction"
-                            },
-                            {
-                                "node": "StringLiteral",
-                                "literal_value": ": "
-                            },
-                            {
-                                "node": "EntityProperty",
-                                "entity": {
-                                    "node": "Entity",
-                                    "key": {
-                                        "node": "Subscript",
-                                        "base": {
-                                            "node": "EntityProperty",
-                                            "entity": {
-                                                "node": "Variable",
-                                                "var_name": "loc",
-                                            },
-                                            "property": {
-                                                "node": "StringLiteral",
-                                                "literal_value": "exits",
-                                            },
-                                        },
-                                        "index": {
-                                            "node": "StringLiteral",
-                                            "literal_value": "direction",
-                                        }
-                                    }
-                                }
-                                "property": {
-                                    "node": "StringLiteral",
-                                    "literal_value": "title"
-                                }
-                        ]
-                    }
-                },
-                "else_body": {
-                    # no else needed
-                },
-            {
-                "node": "SendToPlayer",
-                "expression": {
-                    "node": "EntityProperty",
-                    "entity": {
-                        "node" "Variable",
-                        "var_name": "obj"
-                    }
-                    "key": {
-                        "node": "Variable",
-                        "var_name": "description"
-                    }
-                }
-            }
-        ]
+  {
+    "node": "Assign",
+    "variable": "loc_id",
+    "expression": {
+      "node": "PlayerProperty",
+      "key": "location"
     }
+  },
+  {
+    "node": "Assign",
+    "variable": "loc",
+    "expression": {
+      "node": "Entity",
+      "key": {
+        "node": "Variable",
+        "var_name": "loc_id"
+      }
+    }
+  },
+  {
+    "node": "Assign",
+    "variable": "directions",
+    "expression": {
+      "node": "List",
+      "elements": [
+        {
+          "node": "StringLiteral",
+          "literal_value": "north"
+        },
+        {
+          "node": "StringLiteral",
+          "literal_value": "south"
+        },
+        {
+          "node": "StringLiteral",
+          "literal_value": "east"
+        },
+        {
+          "node": "StringLiteral",
+          "literal_value": "west"
+        },
+        {
+          "node": "StringLiteral",
+          "literal_value": "up"
+        },
+        {
+          "node": "StringLiteral",
+          "literal_value": "down"
+        }
+      ]
+    }
+  },
+  {
+    "node": "SendToPlayer",
+    "expression": {
+      "node": "EntityProperty",
+      "entity": {
+        "node": "Variable",
+        "var_name": "loc"
+      },
+      "property": {
+        "node": "StringLiteral",
+        "literal_value": "title"
+      }
+    }
+  },
+  {
+    "node": "SendToPlayer",
+    "expression": {
+      "node": "EntityProperty",
+      "entity": {
+        "node": "Variable",
+        "var_name": "loc"
+      },
+      "property": {
+        "node": "StringLiteral",
+        "literal_value": "title"
+      }
+    }
+  },
+  {
+    "node": "SendToPlayer",
+    "expression": {
+      "node": "EntityProperty",
+      "entity": {
+        "node": "Variable",
+        "var_name": "loc"
+      },
+      "property": {
+        "node": "StringLiteral",
+        "literal_value": "description"
+      }
+    }
+  },
+  {
+    "node": "SendToPlayer",
+    "expression": {
+      "node": "EntityProperty",
+      "entity": {
+        "node": "Variable",
+        "var_name": "loc"
+      },
+      "property": {
+        "node": "StringLiteral",
+        "literal_value": "description"
+      }
+    }
+  },
+  {
+    "node": "Loop",
+    "iter_var_name": "mob",
+    "list_expression": {
+      "node": "Entities",
+      "filter": {
+        "node": "Compare",
+        "operator": "EntityType",
+        "left": {
+          "node": "Variable",
+          "var_name": "mob"
+        },
+        "right": {
+          "node": "StringLiteral",
+          "literal_value": "Mobile"
+        }
+      }
+    },
+    "body": [
+      {
+        "node": "SendToPlayer",
+        "expression": {
+          "node": "EntityProperty",
+          "entity": {
+            "node": "Variable",
+            "var_name": "mob"
+          },
+          "key": {
+            "node": "Variable",
+            "var_name": "standing_description"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "node": "Loop",
+    "iter_var_name": "obj",
+    "list_expression": {
+      "node": "Entities",
+      "filter": {
+        "node": "Compare",
+        "operator": "EntityType",
+        "left": {
+          "node": "Variable",
+          "var_name": "obj"
+        },
+        "right": {
+          "node": "StringLiteral",
+          "literal_value": "Object"
+        }
+      }
+    },
+    "body": [
+      {
+        "node": "SendToPlayer",
+        "expression": {
+          "node": "EntityProperty",
+          "entity": {
+            "node": "Variable",
+            "var_name": "obj"
+          },
+          "key": {
+            "node": "Variable",
+            "var_name": "description"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "node": "Loop",
+    "iter_var_name": "direction",
+    "list_expression": {
+      "node": "Variable",
+      "var_name": "directions"
+    },
+    "body": [
+      {
+        "node": "If",
+        "condition": {
+          "node": "Compare",
+          "operator": "In",
+          "iter_expression": {
+            "node": "Variable",
+            "var_name": "direction"
+          },
+          "collection_expression": {
+            "node": "EntityProperty",
+            "entity": {
+              "node": "Variable",
+              "var_name": "loc"
+            },
+            "property": {
+              "node": "Variable",
+              "var_name": "exits"
+            }
+          }
+        },
+        "if_body": {
+          "node": "SendToPlayer",
+          "expression": {
+            "node": "StringConcat",
+            "strings": [
+              {
+                "node": "Variable",
+                "var_name": "direction"
+              },
+              {
+                "node": "StringLiteral",
+                "literal_value": ": "
+              },
+              {
+                "node": "EntityProperty",
+                "entity": {
+                  "node": "Entity",
+                  "key": {
+                    "node": "Subscript",
+                    "base": {
+                      "node": "EntityProperty",
+                      "entity": {
+                        "node": "Variable",
+                        "var_name": "loc"
+                      },
+                      "property": {
+                        "node": "StringLiteral",
+                        "literal_value": "exits"
+                      }
+                    },
+                    "index": {
+                      "node": "StringLiteral",
+                      "literal_value": "direction"
+                    }
+                  }
+                },
+                "property": {
+                  "node": "StringLiteral",
+                  "literal_value": "title"
+                }
+              }
+            ]
+          }
+        },
+        "else_body": {}
+      }
+    ]
+  }
 ]
 ```
 
