@@ -321,7 +321,7 @@ Accessing arbitrary variables and functions via user input? Terrible idea. I am 
 
 Here is a (very rough) proposed example:
 
-```
+```json
 [
     {
         "node": "Assign",
