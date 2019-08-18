@@ -586,3 +586,9 @@ Notice that there is no concept of using existing variable names. Any new variab
 #### Why not just make a language? Wouldn't that be much less effort to write?
 
 You know what, you're right. That would be less effort to write than a gigantic JSON structure every time we want to write custom logic. If we don't decouple it with an abstracted AST, the language could also be a security nightmare. Anybody can write their own grammar that builds an AST. The extra benefit of having an AST to work with directly is building the AST with concepts other than languages or grammars. Perhaps logic you can change with a website and validate. Or a fluid tree building flow from a native mobile app.
+
+### Prevalence of Code Objects
+
+Custom code objects will be called in every possible event I can think of that involves a mutation. Generalizing the data into entities makes this much easier. Every entity change can be gated through functions, and hooks can be provided that loop through custom code. For instance: before every entity property change, after every entity property change, maybe a hook wrapper around the entity property change itself so we can modify what the change result will be, etc. Maybe you want to incorporate weather in your MUD. Maybe the weather will change over time and want to address things like burn damage or frostbite. Weather is an entity, have an entity instance, and have hooks on the property changes. Players will have their own ephemeral entity instances (attached by a connector_id), and if they, for example, enter a room that's too hot because of the weather entity, a change of the entity ("player") property ("location") can trigger that effect.
+
+Of course, players will each have their own timer settings to call arbitrary things, such as slow damage over time based on conditions, etc.
