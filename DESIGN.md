@@ -8,7 +8,7 @@ AberMUD instances are derived from "dirt" codebases, iDirt, CDirt, etc. LPMud ac
 
 With the advent of reactive web apps, native mobile apps, and quick prototyping tools, I feel that I can modernize the MUD platform and reintroduce the veterans as well as possibly introduce the textually creative souls into the world of interactive prose. And what if I made custom hooks available almost every possible change in MUD state without compromising performance?
 
-Allow me to indulge a little in my evil plans.
+Allow me to indulge you a little in my evil plans.
 
 # Architecture
 
