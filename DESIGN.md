@@ -376,7 +376,7 @@ Here is a (very rough) proposed example:
     }
   },
   {
-    "node": "SendToPlayer",
+    "node": "SendToSelf",
     "expression": {
       "node": "EntityProperty",
       "entity": {
@@ -390,7 +390,7 @@ Here is a (very rough) proposed example:
     }
   },
   {
-    "node": "SendToPlayer",
+    "node": "SendToSelf",
     "expression": {
       "node": "EntityProperty",
       "entity": {
@@ -404,7 +404,7 @@ Here is a (very rough) proposed example:
     }
   },
   {
-    "node": "SendToPlayer",
+    "node": "SendToSelf",
     "expression": {
       "node": "EntityProperty",
       "entity": {
@@ -418,7 +418,7 @@ Here is a (very rough) proposed example:
     }
   },
   {
-    "node": "SendToPlayer",
+    "node": "SendToSelf",
     "expression": {
       "node": "EntityProperty",
       "entity": {
@@ -451,7 +451,7 @@ Here is a (very rough) proposed example:
     },
     "body": [
       {
-        "node": "SendToPlayer",
+        "node": "SendToSelf",
         "expression": {
           "node": "EntityProperty",
           "entity": {
@@ -531,7 +531,7 @@ Here is a (very rough) proposed example:
           }
         },
         "if_body": {
-          "node": "SendToPlayer",
+          "node": "SendToSelf",
           "expression": {
             "node": "StringConcat",
             "strings": [
