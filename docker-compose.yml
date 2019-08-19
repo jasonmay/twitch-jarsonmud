@@ -3,16 +3,17 @@ services:
   editor:
     build: editor/
     restart: always
-    links: ["postgres"]
+    links: ["storage"]
     ports:
       - "8080:8080"
   core:
     build: core/
     restart: always
-    ports:
-      - "5432:5432"
-  postgres:
-    image: postgres:9.6
+    volumes:
+      - ./core:/core
+    command: ["sleep", "infinity"]
+  storage:
+    build: storage/
     restart: always
     environment:
       POSTGRES_PASSWORD: jarsonmud
