@@ -104,7 +104,7 @@ print(loc.description)  # "You see blah. There is light shining in from blah."
 for m in loc_mobiles:
     print(m.standing_description)  # "Jerry Seinfeld is standing here." etc
 for o in loc_objects:
-    print(o.description)  # "Jerry Seinfeld is standing here." etc
+    print(o.description)  # "There is a small sword here." etc
 for direction in directions:
     if direction in loc.exits:  # "North: Room of Treasures" etc
         print(direction + ": " + locations[loc.exits[direction]].title)
@@ -587,8 +587,32 @@ Notice that there is no concept of using existing variable names. Any new variab
 
 You know what, you're right. That would be less effort to write than a gigantic JSON structure every time we want to write custom logic. If we don't decouple it with an abstracted AST, the language could also be a security nightmare. Anybody can write their own grammar that builds an AST. The extra benefit of having an AST to work with directly is building the AST with concepts other than languages or grammars. Perhaps logic you can change with a website and validate. Or a fluid tree building flow from a native mobile app.
 
+### Examples of AST nodes in the new syntax:
+
+* Entity (safe access to an entity)
+* EntityProperty (safe access to an entity's properties)
+* SendToPlayers (sends messages to other players of your choice)
+* Print (prints to you, might limit this to SendToPlayers)
+
+### Examples of custom hooks for quests, special interactions, etc.:
+
+* Before a property entity changes
+* After a property entity changes
+* Wrapper around an entity change to override the result, or prevent the change, etc.
+* Timer assigned to an entity that calls custom code objects on a schedule
+
 ### Prevalence of Code Objects
 
 Custom code objects will be called in every possible event I can think of that involves a mutation. Generalizing the data into entities makes this much easier. Every entity change can be gated through functions, and hooks can be provided that loop through custom code. For instance: before every entity property change, after every entity property change, maybe a hook wrapper around the entity property change itself so we can modify what the change result will be, etc. Maybe you want to incorporate weather in your MUD. Maybe the weather will change over time and want to address things like burn damage or frostbite. Weather is an entity, have an entity instance, and have hooks on the property changes. Players will have their own ephemeral entity instances (attached by a connector_id), and if they, for example, enter a room that's too hot because of the weather entity, a change of the entity ("player") property ("location") can trigger that effect.
 
 Of course, players will each have their own timer settings to call arbitrary things, such as slow damage over time based on conditions, etc.
+
+### Role of Code Objects in Quests
+
+This engine is so flexible that even the concepts of "quests" is not built in. But it can be designed very easily. It's just a list of code objects that point to hooks.
+
+### Role of Code Objects in Player interactions
+
+Lots of MUDs have a sort of player creation menu. And they have other menus that take the player out of a "enter command" mode. It is difficult to have a menu if everything is so easy to change. So the trick here is to also provide custom code objects for inputs that are separate from the game commands. Players will have an entity which will create state. You will have all string parsing abilities at your disposal for interpreting commands.
+
+At least one input will be required.
