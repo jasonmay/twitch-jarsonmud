@@ -3,12 +3,18 @@ services:
   editor:
     build: editor/
     restart: always
+    links: ["postgres"]
     ports:
       - "8080:8080"
+  core:
+    build: core/
+    restart: always
+    ports:
+      - "5432:5432"
   postgres:
     image: postgres:9.6
     restart: always
     environment:
-      POSTGRES_PASSWORD: twitch
+      POSTGRES_PASSWORD: jarsonmud
     ports:
-      - "5432:5432"
+      - "5433:5432"
