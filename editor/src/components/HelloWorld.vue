@@ -9,7 +9,6 @@
 
 <script>
 /* eslint-disable */
-import Navigator from './interface.js';
 
 export default {
   name: 'HelloWorld',

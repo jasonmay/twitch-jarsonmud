@@ -5,14 +5,10 @@
 </template>
 
 <script>
-import world from './world.js';
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
-  },
-  data() {
-    world: world
   }
 }
 </script>

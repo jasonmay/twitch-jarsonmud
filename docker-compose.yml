@@ -19,3 +19,17 @@ services:
       POSTGRES_PASSWORD: jarsonmud
     ports:
       - "5433:5432"
+  aberbrowser:
+    build: aberbrowser/
+    volumes:
+      - ./aberbrowser:/aberbrowser
+    restart: always
+    ports:
+      - "9094:8080"
+  aberbrowser-app:
+    build: aberbrowser/app
+    volumes:
+      - ./aberbrowser:/aberbrowser
+    restart: always
+    ports:
+      - "9095:5000"
