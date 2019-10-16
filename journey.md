@@ -12,6 +12,8 @@ Hopefully we get to some actual AST building and benchmarking!
 
 The reason I chose Python over Go for Jarsonmud is that I wanted to be able to break syntax down to an abstract syntax tree (AST) and convert the AST into fast running bytecode. I looked into Go for this, and it has support to build ASTs and convert Go to a tree, but (at this time) the tree can't be compiled into bytecode. Python can do this! (Refer to the ast package, and .pyc files).
 
+[Python black](https://pypi.org/project/black/) is nice!
+
 **References**:
 
 [Yaegi](https://godoc.org/github.com/containous/yaegi)
