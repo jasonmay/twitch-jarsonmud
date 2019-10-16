@@ -14,6 +14,10 @@ The reason I chose Python over Go for Jarsonmud is that I wanted to be able to b
 
 [Python black](https://pypi.org/project/black/) is nice!
 
+[Yaegi interpreter guts](https://github.com/containous/yaegi/blob/master/interp/interp.go#L239)
+
+We will want to do what Yaegi's `interp.Eval` does, but instead of converting a string expression into an AST, we want to pass an AST in directly. And then we want to benchmark that!
+
 **References**:
 
 [Yaegi](https://godoc.org/github.com/containous/yaegi)
