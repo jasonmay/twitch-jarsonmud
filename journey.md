@@ -17,3 +17,5 @@ The reason I chose Python over Go for Jarsonmud is that I wanted to be able to b
 [Yaegi](https://godoc.org/github.com/containous/yaegi)
 
 [Getting to/from AST with Python](https://greentreesnakes.readthedocs.io/en/latest/tofrom.html)
+
+[Python built-in AST package](https://docs.python.org/3/library/ast.html)
